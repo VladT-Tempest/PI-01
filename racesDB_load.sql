@@ -136,6 +136,39 @@ IGNORE 1 ROWS;
 
 /*     Año con más carreras     */
 SELECT year, COUNT(year) AS Total_Carreras
-FROM racesCSV
+FROM RacesCSV
 GROUP BY year
-ORDER BY Total_Carreras DESC;
+ORDER BY Total_Carreras DESC
+LIMIT 1;
+
+/* Piloto con mayor cantidad de primeros puestos */
+SELECT d.driverid, COUNT(d.driverid) AS C_Ganadas, CONCAT(d.name, ' ', 
+      d.surname) AS Piloto, r.position 
+FROM driversCSV AS d
+INNER JOIN  resultsCSV AS r ON d.driverid = r.driverid
+WHERE r.position = 1
+GROUP BY d.driverid
+ORDER BY C_Ganadas DESC
+LIMIT 1;
+
+/* Nombre del circuito más corrido */
+SELECT r.circuitId, COUNT(r.circuitId) AS Veces_Corridas,
+    c.name, c.location, c.country
+FROM RacesCSV AS r
+INNER JOIN circuitidCSV as c ON r.circuitId = c.circuitid
+GROUP BY r.circuitId
+ORDER BY Veces_Corridas DESC
+LIMIT 1;
+
+/* Piloto con mayor cantidad de puntos en total, cuyo constructor sea de nacionalidad sea American o British */
+SELECT r.driverid, CONCAT(d.name,' ',d.surname) AS Piloto,
+        SUM(r.points) AS Puntos_Totales
+FROM resultsCSV AS r
+LEFT JOIN driversCSV as  d
+GROUP BY r.driverid
+ORDER BY Puntos_Totales DESC;
+
+/* Para solucionar error 1055 */
+SELECT @@sql_mode;
+/* 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */
+SET sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
