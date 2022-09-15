@@ -32,21 +32,25 @@ query3 = 'SELECT r.circuitId, COUNT(r.circuitId) AS Veces_Corridas, \
         ORDER BY Veces_Corridas DESC \
         LIMIT 1'
 
+# Piloto con mayor cantidad de puntos en total, cuyo constructor sea de nacionalidad
+# american o British
+query4 = ''
 
-@consulta.get("/consulta1")
+
+@consulta.get("/Año con mas carreras")
 def get_drivers():
     return conn.execute(query1).fetchall()
 
 
-@consulta.get("/consulta2")
+@consulta.get("/Piloto con mayor cantidad de primeros puestos")
 def get_drivers():
     return conn.execute(query2).fetchall()
 
-@consulta.get("/consulta3")
+@consulta.get("/Nombre del circuito más corrido")
 def get_drivers():
     return conn.execute(query3).fetchall()
 
-@consulta.post("/consultas")
-def create_consulta(consulta: Consulta):
-    print(consulta)
-    return 'Hello, world'
+@consulta.get("/Piloto con mas puntos con constructor Britanico o Americano")
+def get_drivers():
+    return conn.execute(query4).fetchall()
+
